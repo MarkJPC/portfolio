@@ -57,7 +57,7 @@ export default function ProjectsPage() {
             <p className="text-sm text-secondary-foreground mt-2">{project.summary}</p>
             <div className="mt-4 flex gap-4">
               <Link
-                href={`/admin/projects/${project.id}/edit`}
+                href={`/admin/projects/${project.id}`}
                 className="text-primary underline"
               >
                 Edit
