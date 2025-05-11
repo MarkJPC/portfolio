@@ -4,6 +4,7 @@
 
 @layer base {
   :root {
+    /* Keep light theme values for potential fallback */
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -32,30 +33,87 @@
   }
 
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    /* Technical/Industrial Dark Theme */
+    --background: 220 10% 7%; /* #121212 in HSL */
+    --foreground: 0 0% 88%; /* #E0E0E0 in HSL */
+    
+    --card: 220 10% 10%; /* Slightly lighter than background */
+    --card-foreground: 0 0% 88%;
+    
+    --popover: 220 10% 10%;
+    --popover-foreground: 0 0% 88%;
+    
+    --primary: 174 100% 52%; /* Electric blue #0CFFE1 */
+    --primary-foreground: 0 0% 10%; /* Dark text on bright backgrounds */
+    
+    --secondary: 266 59% 59%; /* Purple #9D4EDD */
+    --secondary-foreground: 0 0% 95%;
+    
+    --muted: 220 10% 15%;
+    --muted-foreground: 0 0% 70%;
+    
+    --accent: 220 10% 18%;
+    --accent-foreground: 174 100% 52%; /* Electric blue accent text */
+    
+    --destructive: 16 100% 50%; /* Orange #FF5C00 */
+    --destructive-foreground: 0 0% 95%;
+    
+    --border: 220 10% 20%;
+    --input: 220 10% 20%;
+    --ring: 174 100% 52%; /* Electric blue ring */
+    
+    /* Chart colors - technical palette */
+    --chart-1: 174 100% 52%; /* Electric blue */
+    --chart-2: 266 59% 59%; /* Purple */
+    --chart-3: 16 100% 50%; /* Orange */
+    --chart-4: 190 90% 50%; /* Cyan */
+    --chart-5: 120 60% 50%; /* Green */
+  }
+}
+
+@layer components {
+  /* Technical theme specific components */
+  .tech-card {
+    @apply bg-card border border-border/50 rounded-md shadow-md hover:shadow-tech transition-shadow duration-300;
+  }
+
+  .tech-button {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md 
+    shadow-md hover:shadow-tech transition-all duration-300;
+  }
+  
+  .tech-input {
+    @apply bg-muted border border-border rounded-md px-3 py-2 focus:ring-2 
+    focus:ring-primary focus:border-primary outline-none transition-all duration-300;
+  }
+  
+  .tech-border {
+    @apply border border-primary/30 rounded-md p-4 hover:border-primary/50 transition-colors duration-300;
+  }
+  
+  .tech-glow {
+    @apply animate-glow;
+  }
+  
+  .tech-section {
+    @apply border-l-2 border-primary/50 pl-4;
+  }
+  
+  .tech-heading {
+    @apply text-foreground font-bold relative;
+  }
+  
+  .tech-heading::after {
+    content: "";
+    @apply absolute -bottom-2 left-0 h-[2px] w-16 bg-primary;
+  }
+  
+  .tech-nav {
+    @apply bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50;
+  }
+  
+  .tech-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4;
   }
 }
 
@@ -66,4 +124,19 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
 }

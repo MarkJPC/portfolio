@@ -47,17 +47,18 @@ export default async function AdminDashboard() {
         </div>
 
         <div className="bg-accent p-4 rounded-md shadow-md">
-          <h2 className="text-xl font-semibold">Media Library</h2>
+          <h2 className="text-xl font-semibold">Settings</h2>
           <p className="text-sm text-secondary-foreground mt-2">
-            Manage your uploaded images.
+            Update your account settings.
           </p>
           <Link
-            href="/admin/media"
+            href="/admin/settings"
             className="mt-4 inline-block text-primary underline"
           >
-            Go to Media Library
+            Go to Settings
           </Link>
         </div>
+
       </section>
     </div>
   );

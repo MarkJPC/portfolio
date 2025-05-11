@@ -52,6 +52,15 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Tech theme specific colors
+        tech: {
+          blue: "#0CFFE1",     // Electric blue
+          purple: "#9D4EDD",   // Purple
+          orange: "#FF5C00",   // Warning orange
+          dark: "#121212",     // Background dark
+          darker: "#0A0A0A",   // Darker shade
+          lighter: "#1E1E1E",  // Lighter shade
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -67,10 +76,25 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        // Tech theme animations
+        "glow": {
+          "0%, 100%": { boxShadow: "0 0 2px #0CFFE1, 0 0 4px #0CFFE1" },
+          "50%": { boxShadow: "0 0 6px #0CFFE1, 0 0 12px #0CFFE1" },
+        },
+        "pulse-tech": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.7" },
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "glow": "glow 2s ease-in-out infinite",
+        "pulse-tech": "pulse-tech 1.5s ease-in-out infinite",
+      },
+      boxShadow: {
+        'tech': '0 0 5px #0CFFE1',
+        'tech-lg': '0 0 10px #0CFFE1',
       },
     },
   },
