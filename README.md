@@ -1,104 +1,117 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+## Mark Cena's Interactive Timeline Portfolio
 
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
+A technically sophisticated, visually engaging portfolio representing my professional growth as an interactive timeline with branching skill paths.
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+### Table of Contents
+- Project Overview
+- Features
+- Technology Stack
+- Project Structure
+- Setup and Installation
+- Content Management System
+- UI Components
+- Current Progress
+- Next Steps
+- Environment Variables
+- Contributing
+- License
 
-## Features
+### Project Overview
+This portfolio website showcases my professional journey, technical skill development, and project history through an interactive timeline. It features a tech-industrial aesthetic with a dark color scheme and vibrant accent colors, creating an engaging and memorable experience for visitors.
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Middleware
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+The portfolio includes an AI-powered guide to help visitors navigate the content and understand my development journey, providing a unique and interactive way to explore my work and skills.
 
-## Demo
+### Features
+Completed
+- Content Management System: Full CMS using Supabase for managing personal information, projects, skills, and developer logs.
+- Contact System: Interactive contact page with email capabilities via EmailJS, and social links with clipboard functionality.
+- Responsive Navigation: Fully functional navigation bar with tech-themed styling and animations.
+- Footer Component: Dynamic footer displaying contact information and social links fetched from Supabase.
+- Admin Dashboard: Secure admin section for managing portfolio content.
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+In Progress
+- Interactive Timeline: Central chronological spine representing professional and academic journey.
+- Skill Branch System: Visual representation of technical skill development with different categories.
+- AI Portfolio Guide: Conversational assistant to enhance visitor experience.
+- Project Detail Views: In-depth project showcases with rich media displays.
+- About Page: Terminal-style about page with interactive elements.
 
-## Deploy to Vercel
+### Technology Stack
+Frontend
+- Framework: Next.js with TypeScript
+- Styling: Tailwind CSS with custom tech theme
+- Form Handling: React Hook Form with Zod validation
+- Icons: Lucide Icons
+- Terminal UI: React Terminal UI
+- Email Integration: EmailJS
 
-Vercel deployment will guide you through creating a Supabase account and project.
+Backend
+- Database: Supabase (PostgreSQL)
+- Authentication: Supabase Auth
+- Storage: Supabase Storage for project images and media
+- Deployment: Vercel
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+### Usage
+Content Management
+1. Managing Projects:
+- Navigate to /admin/projects to view all projects
+- Click "Create New Project" to add a new project
+- Click "Edit" on any project to modify its details
+- Projects support developer logs, image gallery, and detailed markdown content
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
+2. User Settings:
+- Navigate to /admin/settings to update personal information
+- This includes contact details, social links, and portfolio descriptions
+- Viewing the Portfolio
+- Home: Overview of key skills and featured projects
+- Timeline: Interactive visual representation of professional journey (in development)
+- Skills: Detailed breakdown of technical skills with proficiency levels (in development)
+- About: Terminal-style interface with personal information (in development)
+- Contact: Form to send messages and connect on social platforms
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+### Development Status
+Completed
+- Project setup with Next.js, TypeScript, and Tailwind CSS
+- Supabase integration for data storage and retrieval
+- Content Management System for projects and user settings
+- Contact page with EmailJS integration and social links
+- Responsive layout with dark tech theme
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+In Progress
+- Interactive timeline component with Framer Motion
+- Skill visualization system
+- About page with terminal UI
+- Project detail views
 
-## Clone and run locally
+Planned
+- AI-powered portfolio guide
+- Advanced timeline navigation with zoom/pan capabilities
+- Project filtering and search functionality
+- Animation enhancements and transitions
 
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
+### Planned Features
+Interactive Timeline
+- Time-based navigation with horizontal scrolling
+- Interactive nodes for significant milestones
+- Visual indicators for project status
+- Zoom and pan capabilities
 
-2. Create a Next.js app using the Supabase Starter template npx command
+Skill Branch System
+- Visual representation of skill categories with distinct colors
+- Progressive nodes showing technology acquisition over time
+- Proficiency indicators
+- Visual connections between skills and projects
 
-   ```bash
-   npx create-next-app --example with-supabase with-supabase-app
-   ```
+AI Portfolio Guide
+- Conversational interface to assist visitors
+- Custom knowledge base incorporating project details
+- Guided tour capabilities
+- Contextual recommendations
 
-   ```bash
-   yarn create next-app --example with-supabase with-supabase-app
-   ```
+### Contributing
+This is a personal portfolio project, but feedback and suggestions are welcome. Feel free to send me an email message through the contact section of the portfolio
 
-   ```bash
-   pnpm create next-app --example with-supabase with-supabase-app
-   ```
+License
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-3. Use `cd` to change into the app's directory
-
-   ```bash
-   cd with-supabase-app
-   ```
-
-4. Rename `.env.example` to `.env.local` and update the following:
-
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=[INSERT SUPABASE PROJECT API ANON KEY]
-   ```
-
-   Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` can be found in [your Supabase project's API settings](https://app.supabase.com/project/_/settings/api)
-
-5. You can now run the Next.js local development server:
-
-   ```bash
-   npm run dev
-   ```
-
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
-
-6. This template comes with the default shadcn/ui style initialized. If you instead want other ui.shadcn styles, delete `components.json` and [re-install shadcn/ui](https://ui.shadcn.com/docs/installation/next)
-
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
-
-## Feedback and issues
-
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
-
-## More Supabase examples
-
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+© 2025 Mark Cena
