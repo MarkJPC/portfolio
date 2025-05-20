@@ -123,7 +123,9 @@ export const createProjectSchema = z.object({
   demo_url: z.string().url("Must be a valid URL").optional(),
   featured: z.boolean(),
   status: projectStatusEnum,
-  slug: z.string().min(1).optional(), // Optional as it's auto-generated
+  slug: z.string().min(1).optional(),
+  category_ids: z.array(z.string().uuid()).optional(), // Array of category IDs
+  skill_ids: z.array(z.string().uuid()).optional(), // Array of skill IDs
 });
 
 // Update Project Schema - all fields optional for patching

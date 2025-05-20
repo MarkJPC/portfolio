@@ -4,12 +4,10 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { createClient } from "@/utils/supabase/client";
 import { Mail, Phone, Github, Linkedin, Clipboard } from "lucide-react";
 import { contactFormSchema } from "@/lib/schemas/contactSchemas";
 import emailjs from "emailjs-com";
-
-const supabase = createClient();
+import { fetchSocials } from "@/utils/supabaseActions";
 
 type ContactFormInputs = z.infer<typeof contactFormSchema>;
 
@@ -33,11 +31,6 @@ export default function Contact() {
     resolver: zodResolver(contactFormSchema),
   });
 
-  const fetchSocials = async () => {
-    const { data, error } = await supabase.from("user_settings").select("phone_number, email, github_url, linkedin_url").single();
-    if (!error) setSocials(data);
-    setLoading(false);
-  };
 
   const handleCopy = (text: string) => {
     console.log("Copying text:", text); // Debugging line
@@ -74,7 +67,17 @@ export default function Contact() {
   };
 
   useEffect(() => {
-    fetchSocials();
+    setLoading(true);
+    fetchSocials().then((data) => {
+      if (data) {
+        setSocials(data);
+        setLoading(false);
+        console.log("Fetched socials data:", data);
+      } else {
+        setLoading(false);
+        console.error("Failed to fetch socials data.");
+      }
+    });
   }, []);
 
   return (

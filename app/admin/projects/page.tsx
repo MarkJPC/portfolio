@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
+import { fetchProjects } from "@/utils/supabaseActions";
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<any[]>([]);
@@ -10,21 +11,19 @@ export default function ProjectsPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchProjects = async () => {
-      setLoading(true);
-      const supabase = createClient();
-      const { data, error } = await supabase.from("projects").select("*");
+    setLoading(true);
 
-      if (error) {
-        console.error("Error fetching projects:", error);
-        setError("Failed to load projects. Please try again later.");
+    fetchProjects().then((data) => {
+      if (data) {
+        setProjects(data);
+        setLoading(false);
+        console.log("Fetched projects data:", data);
       } else {
-        setProjects(data || []);
+        setError("Failed to fetch projects data.");
         setLoading(false);
       }
-    };
+    })
 
-    fetchProjects();
   }, []);
 
   return (

@@ -4,11 +4,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userSettingsSchema } from "@/lib/schemas/settingsSchemas";
 import { UserSettings } from "@/lib/types/settingTypes";
-import { createClient } from "@/utils/supabase/client";
 import { useState, useEffect } from "react";
+import { fetchSettings } from "@/utils/supabaseActions";
+import { submitSettings } from "@/utils/supabaseActions";
 
 export default function SettingsForm() {
-  const supabase = createClient();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -24,51 +24,39 @@ export default function SettingsForm() {
   });
 
   useEffect(() => {
-    const fetchSettings = async () => {
-      setLoading(true);
-      setError(null);
-
-      const { data, error } = await supabase.from("user_settings").select("*").single();
-
-      if (error) {
-        setError("Failed to load settings. Please try again later.");
-      } else if (data) {
-        reset(data); // Update form values with fetched data
+    setLoading(true);
+    fetchSettings().then((data) => {
+      if (data) {
+        reset(data); // Reset form with fetched data
+        console.log("Fetched settings data:", data);
+        setLoading(false);
+      } else {
+        setError("Failed to fetch settings data.");
       }
-
-      setLoading(false);
-    };
-
-    fetchSettings();
-  }, [supabase, reset]);
+    })
+  }, [reset]);
 
   const onSubmit = async (data: UserSettings) => {
     setLoading(true);
     setError(null);
     setSuccess(null);
 
-    try {
-      const { error: updateError } = await supabase
-        .from("user_settings")
-        .update(data)
-        .eq("id", data.id)
-
-      if (updateError) {
-        throw new Error(updateError.message);
-      }
-
-      setSuccess("Settings updated successfully!");
-    } catch (err: any) {
-      setError(err.message || "An error occurred while updating settings.");
-    } finally {
-      setLoading(false);
-    }
+    submitSettings(data)
+      .then(() => {
+        setSuccess("Settings updated successfully!");
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError("Failed to update settings. Please try again.");
+        console.error("Error updating settings:", error);
+        setLoading(false);
+      });
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 tech-card p-6">
       {error && <p className="text-destructive">{error}</p>}
-      {success && <p className="text-accent">{success}</p>}
+      {success && <p className="block text-sm text-muted-foreground">{success}</p>}
 
       <h1 className="tech-heading text-2xl">Settings</h1>
 
@@ -148,15 +136,15 @@ export default function SettingsForm() {
         {errors.about_me && <p className="text-destructive text-sm">{errors.about_me.message}</p>}
       </div>
 
-        <div className="tech-section">
-            <label htmlFor="about_short" className="block text-sm text-muted-foreground">
-            Short About Me
-            </label>
-            <textarea id="about_short" {...register("about_short")} className="tech-textarea" />
-            {errors.about_short && (
-            <p className="text-destructive text-sm">{errors.about_short.message}</p>
-            )}
-        </div>
+      <div className="tech-section">
+          <label htmlFor="about_short" className="block text-sm text-muted-foreground">
+          Short About Me
+          </label>
+          <textarea id="about_short" {...register("about_short")} className="tech-textarea" />
+          {errors.about_short && (
+          <p className="text-destructive text-sm">{errors.about_short.message}</p>
+          )}
+      </div>
 
       <button
         type="submit"

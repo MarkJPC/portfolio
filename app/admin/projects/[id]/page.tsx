@@ -60,6 +60,8 @@ export default function ProjectEditForm({ params }: { params: Promise<{ id: stri
   });
   const [devlogContent, setDevlogContent] = useState("");
   const [project, setProject] = useState<ProjectWithRelations | null>(null);
+  const [editingDevlogId, setEditingDevlogId] = useState<string | null>(null);
+  const [editingDevlog, setEditingDevlog] = useState<Partial<DevlogEntryForm>>({}); 
 
   // Form setup
   const {
@@ -104,6 +106,8 @@ export default function ProjectEditForm({ params }: { params: Promise<{ id: stri
 
         if (!projectData) {
           throw new Error("Project not found");
+        } else {
+          console.log("Fetched project data:", projectData);
         }
 
         // Fetch gallery images
@@ -126,7 +130,11 @@ export default function ProjectEditForm({ params }: { params: Promise<{ id: stri
 
         if (devlogError) {
           console.error("Error fetching devlog entries:", devlogError);
+        } else {
+          console.log("Fetched devlog entries:", devlogData, id);
         }
+        console.log("Project ID used for query:", id);
+        console.log("Project ID type:", typeof id);
 
         // Set project data to state and form
         setProject({
@@ -248,16 +256,6 @@ export default function ProjectEditForm({ params }: { params: Promise<{ id: stri
   // Remove a devlog entry
   const removeDevlogEntry = (id: string) => {
     setDevlogEntries(devlogEntries.filter(entry => entry.id !== id));
-  };
-
-  // Edit an existing devlog entry
-  const editDevlogEntry = (entry: DevlogEntryForm) => {
-    setCurrentDevlog({
-      ...entry,
-    });
-    setDevlogContent(entry.content);
-    // Remove the entry being edited from the list
-    setDevlogEntries(devlogEntries.filter(e => e.id !== entry.id));
   };
 
   // Handle form submission
@@ -422,6 +420,7 @@ export default function ProjectEditForm({ params }: { params: Promise<{ id: stri
 
       // STEP 6: Update existing devlog entries
       const existingDevlogs = devlogEntries.filter(entry => entry.original_id);
+      console.log("Existing devlog entries to update:", existingDevlogs);
       for (const entry of existingDevlogs) {
         const { error: updateError } = await supabase
           .from('devlog_entries')
@@ -643,6 +642,96 @@ export default function ProjectEditForm({ params }: { params: Promise<{ id: stri
                 Add Log
               </button>
             </div>
+
+            {devlogEntries.length > 0 ? (
+              <div className="space-y-4">
+                {devlogEntries.map((entry) => (
+                  <div
+                    key={entry.id}
+                    className="border p-4 rounded-md flex flex-col gap-2 bg-muted/10"
+                  >
+                    {editingDevlogId === entry.id ? (
+                      <>
+                        <input
+                          type="text"
+                          value={editingDevlog.title ?? ""}
+                          onChange={e => setEditingDevlog(ed => ({ ...ed, title: e.target.value }))}
+                          className="tech-input mb-2"
+                          placeholder="Log Title"
+                        />
+                        <textarea
+                          value={editingDevlog.content ?? ""}
+                          onChange={e => setEditingDevlog(ed => ({ ...ed, content: e.target.value }))}
+                          className="tech-input mb-2"
+                          placeholder="Log Content"
+                        />
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            className="tech-button bg-primary"
+                            onClick={() => {
+                              setDevlogEntries(devlogEntries.map(d =>
+                                d.id === entry.id
+                                  ? { ...d, title: editingDevlog.title ?? d.title, content: editingDevlog.content ?? d.content }
+                                  : d
+                              ));
+                              setEditingDevlogId(null);
+                              setEditingDevlog({});
+                            }}
+                          >
+                            Save
+                          </button>
+                          <button
+                            type="button"
+                            className="tech-button bg-muted text-muted-foreground"
+                            onClick={() => {
+                              setEditingDevlogId(null);
+                              setEditingDevlog({});
+                            }}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="flex justify-between items-center">
+                          <h3 className="font-medium text-lg">{entry.title}</h3>
+                          <div className="flex gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setEditingDevlogId(entry.id);
+                                setEditingDevlog({ title: entry.title, content: entry.content });
+                              }}
+                              className="text-blue-600 hover:text-blue-800"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => removeDevlogEntry(entry.id)}
+                              className="text-destructive hover:text-destructive/80"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+                        <p className="text-sm text-muted-foreground">{entry.entry_date}</p>
+                        <p className="text-sm">{entry.content}</p>
+                        {entry.milestone_type && (
+                          <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">
+                            {entry.milestone_type === "major" ? "Major Milestone" : "Minor Milestone"}
+                          </span>
+                        )}
+                      </>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-muted-foreground">No developer logs added yet.</p>
+            )}
           </div>
         </div>
       </div>

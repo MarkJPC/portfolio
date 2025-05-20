@@ -12,6 +12,8 @@ import "react-markdown-editor-lite/lib/index.css"; // Import default styles for 
 import ReactMarkdown from "react-markdown";
 import { v4 as uuidv4 } from 'uuid';
 import Image from "next/image";
+import { Skill, ProjectCategory } from "@/lib/schemas/schema";
+import { fetchSkills, fetchProjectCategories } from "@/utils/supabaseActions";
 
 // Dynamically import the Markdown editor
 const MarkdownEditor = dynamic(() => import("react-markdown-editor-lite"), { ssr: false });
@@ -52,6 +54,12 @@ export default function ProjectForm() {
     milestone_type: null
   });
   const [devlogContent, setDevlogContent] = useState("");
+  const [allSkills, setAllSkills] = useState<Skill[]>([]);
+  const [allCategories, setAllCategories] = useState<ProjectCategory[]>([]);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
+  const [selectedSkillIds, setSelectedSkillIds] = useState<string[]>([]);
+  const [newCategory, setNewCategory] = useState("");
+  const [newSkill, setNewSkill] = useState("");
 
   const {
     register,
@@ -67,6 +75,8 @@ export default function ProjectForm() {
       start_date: new Date().toISOString().split("T")[0],
       status: "in_progress",
       featured: false,
+      category_ids: [],
+      skill_ids: [],
     },
   });
 
@@ -137,6 +147,8 @@ export default function ProjectForm() {
     const onSubmit = async (data: CreateProjectInput) => {
         setLoading(true);
         setError(null);
+
+        console.log("Form data before submission:", data);
     
         try {
         // Get the current user
@@ -282,10 +294,30 @@ export default function ProjectForm() {
     }
   }, [description, setValue]);
 
+  useEffect(() => {
+    fetchSkills().then((data) => {
+      if (data) {
+        console.log("Fetched skills:", data);
+        setAllSkills(data);
+      } else {
+        setError("Failed to fetch skills data.");
+      }
+    });
+
+    fetchProjectCategories().then((data) => {
+      if (data) {
+        console.log("Fetched project categories:", data);
+        setAllCategories(data);
+      } else {
+        setError("Failed to fetch project categories data.");
+      }
+    });
+  }, []);
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-6 max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md my-8"
+      className="flex flex-col gap-6 max-w-4xl mx-auto p-6 bg-card text-card-foreground shadow-tech rounded-md my-8"
     >
       <h1 className="text-2xl font-bold">Create Project</h1>
 
@@ -488,9 +520,7 @@ export default function ProjectForm() {
               ))}
             </div>
           </div>
-        </div>
 
-        <div className="space-y-6">
           {/* Description Section */}
           <div className="border p-4 rounded-md">
             <h2 className="text-lg font-semibold mb-4">Project Description</h2>
@@ -637,6 +667,80 @@ export default function ProjectForm() {
               </div>
             )}
           </div>
+
+          {/* Project Categories */}
+          <div className="border p-4 rounded-md">
+            <Label>Categories</Label>
+              <div className="flex flex-wrap gap-2">
+                {allCategories.map(cat => (
+                  <label key={cat.id} className="flex items-center gap-1">
+                    <input
+                      type="checkbox"
+                      checked={selectedCategoryIds.includes(cat.id ?? "")}
+                      onChange={e => {
+                        setSelectedCategoryIds(ids => {
+                          let updated = e.target.checked
+                          ? [...ids, cat.id]
+                          : ids.filter(id => id !== cat.id);
+                        return updated.filter((id): id is string => !!id);
+                        });
+                      }}
+                    />
+                    {cat.name}
+                  </label>
+                ))}
+              </div>
+              {/* Optionally, add an input to create a new category */}
+              <input
+                type="text"
+                placeholder="Add new category"
+                value={newCategory}
+                onChange={e => setNewCategory(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === "Enter" && newCategory.trim()) {
+                    handleAddCategory(newCategory.trim());
+                  }
+                }}
+                className="border p-1 rounded mt-2"
+              />
+          </div>
+
+          {/* Project Skills */}
+          <div className="border p-4 rounded-md">
+          <Label>Skills</Label>
+            <div className="flex flex-wrap gap-2">
+              {allSkills.map(skill => (
+                <label key={skill.id} className="flex items-center gap-1">
+                  <input
+                    type="checkbox"
+                    checked={selectedSkillIds.includes(skill.id ?? "")}
+                    onChange={e => {
+                      setSelectedSkillIds(ids => {
+                        let updated = e.target.checked
+                          ? [...ids, skill.id]
+                          : ids.filter(id => id !== skill.id);
+                        return updated.filter((id): id is string => !!id);
+                      });
+                    }}
+                  />
+                  {skill.name}
+                </label>
+              ))}
+            </div>
+            {/* Optionally, add an input to create a new skill */}
+            <input
+              type="text"
+              placeholder="Add new skill"
+              value={newSkill}
+              onChange={e => setNewSkill(e.target.value)}
+              onKeyDown={e => {
+                if (e.key === "Enter" && newSkill.trim()) {
+                  handleAddSkill(newSkill.trim());
+                }
+              }}
+              className="border p-1 rounded mt-2"
+            />
+          </div> 
         </div>
       </div>
 
